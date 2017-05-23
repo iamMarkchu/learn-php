@@ -28,11 +28,12 @@ $product_count = 2;
 $objSheet->setCellValue('A1', 'CELEBRITIES');
 $objSheet->setCellValue('B1', 'POST');
 $objSheet->setCellValue('C1', 'PRODUCT');
+
 foreach ($all_celebrities as $k => $celebrity)
 {
     $all_posts = $db->getPostsByCid($celebrity['id']);
     $celebrity_position = $product_count;
-    $objSheet->setCellValue('A'.$celebrity_position, $celebrity['name']);
+    $objSheet->setCellValue('A'.$celebrity_position, $celebrity['name'])->getStyle()->getFill()->getStartColor()->setARGB('FF808080');
     foreach ($all_posts as $kk => $post)
     {
         $all_products = $db->getProductsByPid($post['id']);
@@ -50,6 +51,8 @@ foreach ($all_celebrities as $k => $celebrity)
     $celebrity_end = $product_count-1;
     $objSheet->mergeCells('A'.$celebrity_position.':A'.$celebrity_end);
 }
-
+$objSheet->getColumnDimension('A')->setAutoSize(true);
+//$objSheet->getColumnDimension('B')->setWidth(40);
+$objSheet->getColumnDimension('C')->setAutoSize(true);
 $objWriter = PHPExcel_IOFactory::createWriter($objExcel, 'excel2007');
 $objWriter->save('test1.xlsx');
